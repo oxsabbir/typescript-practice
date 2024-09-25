@@ -1,3 +1,9 @@
+/**
+ * So we going use type when we are creating array object 
+ * When we are using it as function parameters 
+ * We will get checked on the time of the function is called 
+ * or if we try to mutate those types of value with other type of value 
+ */
 type Pizza = {
   name : string
   price : number
@@ -5,12 +11,12 @@ type Pizza = {
 
 type Order = {
   orderId : number
-  pizza : object
+  pizza : Pizza
   status : string
 }
 
 
-const menu = [
+const menu : Array<Pizza> = [
   { name: "Margherita", price: 8 },
   { name: "Pepperoni", price: 8 },
   { name: "Hawaiian", price: 8 },
@@ -29,15 +35,16 @@ let orderQueue : Array<Order> = [];
 const addNewPizza = function (pizzaObject : Pizza) {
   menu.push(pizzaObject);
 };
+
+
 addNewPizza({ name: "Rissoto", price: 8 });
+addNewPizza({ name: "BBQ chicken", price:12 });
 
 const placeOder = function (pizzaName :string) {
   const foundPizza = menu.find((item) => item.name === pizzaName);
 
   if (!foundPizza) return console.log("No pizza found with this name");
-
-
-  let orderedPizza : Order = {
+  let orderedPizza = {
     orderId : orderId ,
     pizza: foundPizza,
     status: "orderd",
