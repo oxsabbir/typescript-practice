@@ -1,3 +1,15 @@
+type Pizza = {
+  name : string
+  price : number
+}
+
+type Order = {
+  orderId : number
+  pizza : object
+  status : string
+}
+
+
 const menu = [
   { name: "Margherita", price: 8 },
   { name: "Pepperoni", price: 8 },
@@ -8,27 +20,27 @@ const menu = [
 let cashRegister = 100;
 
 let orderId : number = 1;
-const orderQueue = [];
+let orderQueue : Array<Order> = [];
 
 /**
  * adding utility funciton to add new pizza menu to the menu
  */
 
-const addNewPizza = function (pizzaObject) {
+const addNewPizza = function (pizzaObject : Pizza) {
   menu.push(pizzaObject);
 };
 addNewPizza({ name: "Rissoto", price: 8 });
 
-const placeOder = function (pizzaName) {
+const placeOder = function (pizzaName :string) {
   const foundPizza = menu.find((item) => item.name === pizzaName);
 
   if (!foundPizza) return console.log("No pizza found with this name");
 
 
-  const orderedPizza = {
+  let orderedPizza : Order = {
+    orderId : orderId ,
     pizza: foundPizza,
     status: "orderd",
-    orderId : orderId ,
   };
 
   cashRegister += foundPizza.price;

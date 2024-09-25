@@ -16,5 +16,5 @@ const person : Person = {
 const person2 : Person = {
     name : 'elen',
     age : 14,
-    isstudent : false
+    isStudent : false
 }
