@@ -5,6 +5,7 @@
  * or if we try to mutate those types of value with other type of value
  */
 type Pizza = {
+  id: number;
   name: string;
   price: number;
 };
@@ -16,10 +17,10 @@ type Order = {
 };
 
 const menu: Array<Pizza> = [
-  { name: "Margherita", price: 23 },
-  { name: "Pepperoni", price: 64 },
-  { name: "Hawaiian", price: 23 },
-  { name: "Veggie", price: 61 },
+  { id: 1, name: "Margherita", price: 23 },
+  { id: 2, name: "Pepperoni", price: 64 },
+  { id: 3, name: "Hawaiian", price: 23 },
+  { id: 4, name: "Veggie", price: 61 },
 ];
 
 let cashRegister = 100;
@@ -35,8 +36,8 @@ const addNewPizza = function (pizzaObject: Pizza) {
   menu.push(pizzaObject);
 };
 
-addNewPizza({ name: "Rissoto", price: 18 });
-addNewPizza({ name: "BBQ chicken", price: 32 });
+addNewPizza({ id: 5, name: "Rissoto", price: 18 });
+addNewPizza({ id: 6, name: "BBQ chicken", price: 32 });
 
 const placeOder = function (pizzaName: string) {
   const foundPizza = menu.find((item) => item.name === pizzaName);
@@ -56,9 +57,9 @@ const placeOder = function (pizzaName: string) {
   return orderedPizza;
 };
 
-placeOder("BBQ chicken")
-placeOder("Rissoto")
-placeOder("Pepperoni")
+placeOder("BBQ chicken");
+placeOder("Rissoto");
+placeOder("Pepperoni");
 
 const completeOrder = function (orderId: number) {
   const orderIndex = orderQueue.findIndex((item) => item.orderId === orderId);
@@ -76,7 +77,45 @@ const pizzaStatus = function () {
   console.log("OrderHistory :", orderQueue);
 };
 
-completeOrder(1)
-completeOrder(3)
+completeOrder(1);
+completeOrder(3);
 
-pizzaStatus()
+const getPizzaDetails = function (identifier: number | string) {
+  /**
+   * Now here we are only checking for string not checking for number 
+   * The reason is typescript uses typenarrowing to know what type left
+   * Because of we don't to check for the rest of.
+   * It know it has only 2 type (string , number ) one is checked(string) the other one is left(number).
+   * That's why we don't the other if check to see if it's number
+   */
+
+  // example of checking both 
+  /**
+   * {
+
+    if (typeof identifier === "number") {
+      return item.id === identifier;
+    } else if (typeof identifier === "string") {
+      return item.name === identifier;
+    } else {
+      return false
+    }
+  }
+   */
+  
+  // this uses type narrowing 
+  const selectedPizza = menu.find((item) =>
+    typeof identifier === "string"
+      ? item.name.toLocaleLowerCase() === identifier.toLocaleLowerCase()
+      : item.id === identifier
+  );
+
+  if (!selectedPizza)
+    return console.log("No pizza found using that identifier");
+  console.log(selectedPizza);
+};
+
+getPizzaDetails(3);
+getPizzaDetails("rissoto");
+
+// pizzaStatus();
