@@ -1,53 +1,52 @@
 /**
- * So we going use type when we are creating array object 
- * When we are using it as function parameters 
- * We will get checked on the time of the function is called 
- * or if we try to mutate those types of value with other type of value 
+ * So we going use type when we are creating array object
+ * When we are using it as function parameters
+ * We will get checked on the time of the function is called
+ * or if we try to mutate those types of value with other type of value
  */
 type Pizza = {
-  name : string
-  price : number
-}
+  name: string;
+  price: number;
+};
 
 type Order = {
-  orderId : number
-  pizza : Pizza
-  status : string
-}
+  orderId: number;
+  pizza: Pizza;
+  status: "ordered" | "complete";
+};
 
-
-const menu : Array<Pizza> = [
-  { name: "Margherita", price: 8 },
-  { name: "Pepperoni", price: 8 },
-  { name: "Hawaiian", price: 8 },
-  { name: "Veggie", price: 8 },
+const menu: Array<Pizza> = [
+  { name: "Margherita", price: 23 },
+  { name: "Pepperoni", price: 64 },
+  { name: "Hawaiian", price: 23 },
+  { name: "Veggie", price: 61 },
 ];
 
 let cashRegister = 100;
 
-let orderId : number = 1;
-let orderQueue : Array<Order> = [];
+let orderId: number = 1;
+let orderQueue: Order[] = [];
 
 /**
  * adding utility funciton to add new pizza menu to the menu
  */
 
-const addNewPizza = function (pizzaObject : Pizza) {
+const addNewPizza = function (pizzaObject: Pizza) {
   menu.push(pizzaObject);
 };
 
+addNewPizza({ name: "Rissoto", price: 18 });
+addNewPizza({ name: "BBQ chicken", price: 32 });
 
-addNewPizza({ name: "Rissoto", price: 8 });
-addNewPizza({ name: "BBQ chicken", price:12 });
-
-const placeOder = function (pizzaName :string) {
+const placeOder = function (pizzaName: string) {
   const foundPizza = menu.find((item) => item.name === pizzaName);
 
   if (!foundPizza) return console.log("No pizza found with this name");
-  let orderedPizza = {
-    orderId : orderId ,
+
+  let orderedPizza: Order = {
+    orderId: orderId,
     pizza: foundPizza,
-    status: "orderd",
+    status: "ordered",
   };
 
   cashRegister += foundPizza.price;
@@ -57,18 +56,27 @@ const placeOder = function (pizzaName :string) {
   return orderedPizza;
 };
 
-console.log(placeOder("Hawaiian"));
+placeOder("BBQ chicken")
+placeOder("Rissoto")
+placeOder("Pepperoni")
 
-const completeOrder = function (orderId : number) {
-  const orderIndex = orderQueue.findIndex((item) => item.orderId  === orderId);
+const completeOrder = function (orderId: number) {
+  const orderIndex = orderQueue.findIndex((item) => item.orderId === orderId);
 
   if (orderIndex < 0) return console.log("No order found with this ID");
 
-  orderQueue[orderIndex].status  = "complete";
+  orderQueue[orderIndex].status = "complete";
 
   return orderQueue[orderIndex];
 };
 
-completeOrder(1);
-  
+const pizzaStatus = function () {
+  console.log("CashRegister :", cashRegister);
+  console.log("Menu :", menu);
+  console.log("OrderHistory :", orderQueue);
+};
 
+completeOrder(1)
+completeOrder(3)
+
+pizzaStatus()

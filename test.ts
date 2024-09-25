@@ -3,6 +3,10 @@
  * And Use it for type safety and reduce runtime error
  */
 
+/**
+ * Adding Union type for user role inside the user 
+ */
+
 type Address = {
     street : string 
     city : string 
@@ -12,6 +16,7 @@ type Address = {
 type Person = {
     name : string 
     age : number
+    role : "admin" | "member" | "guest"
     isStudent : boolean
     address? : Address
 }
@@ -19,6 +24,7 @@ type Person = {
 const person1 : Person = {
     name: "sabbir",
     age: 12,
+    role : 'guest',
     isStudent: true,
     address: {
         street: "123 Main",
@@ -29,6 +35,7 @@ const person1 : Person = {
 const person2 : Person = {
     name: 'elen',
     age: 14,
+    role :"member",
     isStudent: false,
 }
 
@@ -49,6 +56,8 @@ let onlyName : "ONLY" = "ONLY"
 /**
  * Here we used the type of array and store the Person type object in there
  */
+
+
 
 const people : Person[]= [person1, person2]
 console.log(people)
