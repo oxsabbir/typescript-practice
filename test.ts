@@ -21,36 +21,47 @@ type Person = {
   address?: Address;
 };
 
-type Role = "admin" | "member" | "contributor"
+type Role = "admin" | "member" | "contributor";
 
 type User = {
   id: number;
   username: string;
-  role  : Role
+  role: Role;
 };
 
-const user : User[] = [
-    { id : 1, username : "jon_doe", role : "contributor"},
-    { id : 2, username : "machine", role : "admin"},
-    { id : 3, username : "skill_mat", role : "member"},
-    { id : 4, username : "charlie_brown", role : "member"}
-]
+let nextUserId = 1;
+
+const user: User[] = [
+  { id: nextUserId++, username: "jon_doe", role: "contributor" },
+  { id: nextUserId++, username: "machine", role: "admin" },
+  { id: nextUserId++, username: "skill_mat", role: "member" },
+  { id: nextUserId++, username: "charlie_brown", role: "member" },
+];
 /**
  * Here i leard about utility type called Partial it's uses generics syntax
  * The partial takes in a type and return a new type with slight modification like it's set all the property to optional
  */
 
-const updateUser =  function (id :number , updates : Partial<User>) {
-    const selectedUser = user.find(item => item.id === id)
-    console.log(selectedUser)
-    if(!selectedUser) return console.log("No user found by provided ID")
-    const updatedUser = Object.assign(selectedUser, updates)
-    return updatedUser
-}
+const updateUser = function (id: number, updates: Partial<User>) {
+  const selectedUser = user.find((item) => item.id === id);
+  console.log(selectedUser);
+  if (!selectedUser) return console.log("No user found by provided ID");
+  const updatedUser = Object.assign(selectedUser, updates);
+  return updatedUser;
+};
 
-updateUser(1, {role : "member"})
-updateUser(2, {role : "admin", username :"oxsabbir"})
-console.log(user)
+const addNewUser = function (newUser: Omit<User, "id">): User {
+    const userAdded: User = {id : nextUserId++ , ...newUser}
+    user.push(userAdded)
+    return userAdded
+};
+
+addNewUser({username : "rocky", role :"contributor"})
+
+updateUser(1, { role: "member" });
+updateUser(2, { role: "admin", username: "oxsabbir" });
+
+console.log(user);
 
 const person1: Person = {
   name: "sabbir",

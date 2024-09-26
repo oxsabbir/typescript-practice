@@ -33,9 +33,14 @@ const menu: Array<Pizza> = [
  * And adding the return type explecitly to let typescript know we are returning from the function
  */
 
-const addNewPizza = function (pizzaObject: Pizza) {
-  const newPizza = pizzaObject;
-  newPizza.id = nextPiazzaId++;
+/**
+ * here we are using Omit Utility types to omit some type property 
+ * and adding it later inside our function 
+ * 
+ */
+
+const addNewPizza = function (pizzaObject: Omit<Pizza, "id">) {
+  const newPizza : Pizza = {id : nextPiazzaId++, ...pizzaObject};
   menu.push(newPizza);
 };
 
