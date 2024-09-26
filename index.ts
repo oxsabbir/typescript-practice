@@ -16,37 +16,39 @@ type Order = {
   status: "ordered" | "complete";
 };
 
-const menu: Array<Pizza> = [
-  { id: 1, name: "Margherita", price: 23 },
-  { id: 2, name: "Pepperoni", price: 64 },
-  { id: 3, name: "Hawaiian", price: 23 },
-  { id: 4, name: "Veggie", price: 61 },
-];
-
 let cashRegister = 100;
-
+let nextPiazzaId = 1;
 let orderId: number = 1;
 let orderQueue: Order[] = [];
 
+const menu: Array<Pizza> = [
+  { id: nextPiazzaId++, name: "Margherita", price: 23 },
+  { id: nextPiazzaId++, name: "Pepperoni", price: 64 },
+  { id: nextPiazzaId++, name: "Hawaiian", price: 23 },
+  { id: nextPiazzaId++, name: "Veggie", price: 61 },
+];
+
 /**
  * adding utility funciton to add new pizza menu to the menu
- * And adding the return type explecitly to let typescript know we are returning from the function 
+ * And adding the return type explecitly to let typescript know we are returning from the function
  */
 
-const addNewPizza = function (pizzaObject: Pizza):void {
-  menu.push(pizzaObject);
+const addNewPizza = function (pizzaObject: Pizza) {
+  const newPizza = pizzaObject;
+  newPizza.id = nextPiazzaId++;
+  menu.push(newPizza);
 };
 
-addNewPizza({ id: 5, name: "Rissoto", price: 18 });
-addNewPizza({ id: 6, name: "BBQ chicken", price: 32 });
+addNewPizza({ name: "Rissoto", price: 18 });
+addNewPizza({ name: "BBQ chicken", price: 32 });
 
-const placeOder = function (pizzaName: string) :Order {
+const placeOder = function (pizzaName: string): Order {
   const foundPizza = menu.find((item) => item.name === pizzaName);
 
-  if(!foundPizza) throw new Error("No pizza found with this name")
+  if (!foundPizza) throw new Error("No pizza found with this name");
 
   let orderedPizza: Order = {
-    orderId: orderId,
+    orderId: orderId++,
     pizza: foundPizza,
     status: "ordered",
   };
@@ -54,7 +56,6 @@ const placeOder = function (pizzaName: string) :Order {
   cashRegister += foundPizza.price;
 
   orderQueue.push(orderedPizza);
-  orderId++;
   return orderedPizza;
 };
 
@@ -62,10 +63,10 @@ placeOder("BBQ chicken");
 placeOder("Rissoto");
 placeOder("Pepperoni");
 
-const completeOrder = function (orderId: number) : Order {
+const completeOrder = function (orderId: number): Order | void {
   const orderIndex = orderQueue.findIndex((item) => item.orderId === orderId);
 
-  if(!orderIndex) throw new Error("No order found with this ID")
+  if (orderIndex < 0) return console.log("No order found with this ID");
 
   orderQueue[orderIndex].status = "complete";
 
@@ -81,7 +82,7 @@ const pizzaStatus = function () {
 completeOrder(1);
 completeOrder(3);
 
-const getPizzaDetails = function (identifier: number | string) : Pizza {
+const getPizzaDetails = function (identifier: number | string): Pizza | void {
   /**
    * Now here we are only checking for string not checking for number 
    * The reason is typescript uses typenarrowing to know what type left
@@ -105,17 +106,20 @@ const getPizzaDetails = function (identifier: number | string) : Pizza {
     } else if (typeof identifier === "string") {
       return item.name.toLocaleLowerCase() === identifier.toLocaleLowerCase();
     } else {
-       throw new Error("Parameter `identifier` must be either a string or number ");
+      throw new Error(
+        "Parameter `identifier` must be either a string or number "
+      );
     }
   });
 
   if (!selectedPizza)
-    throw new Error("No pizza found using that identifier")
+    return console.log("No pizza found using that identifier");
   console.log(selectedPizza);
-  return selectedPizza
+  return selectedPizza;
 };
 
-getPizzaDetails(23);
+getPizzaDetails(3);
 getPizzaDetails("rissoto");
+console.log(orderId);
 
 // pizzaStatus();
