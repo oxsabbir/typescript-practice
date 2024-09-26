@@ -30,19 +30,20 @@ let orderQueue: Order[] = [];
 
 /**
  * adding utility funciton to add new pizza menu to the menu
+ * And adding the return type explecitly to let typescript know we are returning from the function 
  */
 
-const addNewPizza = function (pizzaObject: Pizza) {
+const addNewPizza = function (pizzaObject: Pizza):void {
   menu.push(pizzaObject);
 };
 
 addNewPizza({ id: 5, name: "Rissoto", price: 18 });
 addNewPizza({ id: 6, name: "BBQ chicken", price: 32 });
 
-const placeOder = function (pizzaName: string) {
+const placeOder = function (pizzaName: string) :Order {
   const foundPizza = menu.find((item) => item.name === pizzaName);
 
-  if (!foundPizza) return console.log("No pizza found with this name");
+  if(!foundPizza) throw new Error("No pizza found with this name")
 
   let orderedPizza: Order = {
     orderId: orderId,
@@ -61,10 +62,10 @@ placeOder("BBQ chicken");
 placeOder("Rissoto");
 placeOder("Pepperoni");
 
-const completeOrder = function (orderId: number) {
+const completeOrder = function (orderId: number) : Order {
   const orderIndex = orderQueue.findIndex((item) => item.orderId === orderId);
 
-  if (orderIndex < 0) return console.log("No order found with this ID");
+  if(!orderIndex) throw new Error("No order found with this ID")
 
   orderQueue[orderIndex].status = "complete";
 
@@ -80,42 +81,41 @@ const pizzaStatus = function () {
 completeOrder(1);
 completeOrder(3);
 
-const getPizzaDetails = function (identifier: number | string) {
+const getPizzaDetails = function (identifier: number | string) : Pizza {
   /**
    * Now here we are only checking for string not checking for number 
    * The reason is typescript uses typenarrowing to know what type left
    * Because of we don't to check for the rest of.
    * It know it has only 2 type (string , number ) one is checked(string) the other one is left(number).
-   * That's why we don't the other if check to see if it's number
-   */
-
-  // example of checking both 
-  /**
+   * That's why we don't the other if check to see if it's number 
    * {
-
-    if (typeof identifier === "number") {
-      return item.id === identifier;
-    } else if (typeof identifier === "string") {
-      return item.name === identifier;
-    } else {
-      return false
-    }
-  }
-   */
-  
-  // this uses type narrowing 
-  const selectedPizza = menu.find((item) =>
+    const selectedPizza = menu.find((item) =>
     typeof identifier === "string"
       ? item.name.toLocaleLowerCase() === identifier.toLocaleLowerCase()
       : item.id === identifier
+      
   );
+   */
+
+  // example of checking both
+
+  const selectedPizza = menu.find((item) => {
+    if (typeof identifier === "number") {
+      return item.id === identifier;
+    } else if (typeof identifier === "string") {
+      return item.name.toLocaleLowerCase() === identifier.toLocaleLowerCase();
+    } else {
+       throw new Error("Parameter `identifier` must be either a string or number ");
+    }
+  });
 
   if (!selectedPizza)
-    return console.log("No pizza found using that identifier");
+    throw new Error("No pizza found using that identifier")
   console.log(selectedPizza);
+  return selectedPizza
 };
 
-getPizzaDetails(3);
+getPizzaDetails(23);
 getPizzaDetails("rissoto");
 
 // pizzaStatus();
