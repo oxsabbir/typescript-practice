@@ -29,6 +29,16 @@ type User = {
   role: Role;
 };
 
+// we can extend type to by mixing these 2 type we created new type called Bear
+type Animal = {
+  name: string;
+};
+type Bear = Animal & {
+  honey: boolean;
+};
+
+const bearOne: Bear = { name: "big Bear", honey: true };
+
 let nextUserId = 1;
 
 const user: User[] = [
@@ -42,7 +52,7 @@ const user: User[] = [
  * The partial takes in a type and return a new type with slight modification like it's set all the property to optional
  */
 
-const updateUser = function (id: number, updates: Partial<User>):User|void  {
+const updateUser = function (id: number, updates: Partial<User>): User | void {
   const selectedUser = user.find((item) => item.id === id);
   console.log(selectedUser);
   if (!selectedUser) return console.log("No user found by provided ID");
@@ -116,7 +126,6 @@ const objectArray = [{ name: "don't knwo" }, { name: "bob" }];
 const getLastItem = function <PlaceType>(
   array: PlaceType[]
 ): PlaceType | undefined {
-    
   const retunableItem: PlaceType = array[array.length - 1];
   return retunableItem;
 };
@@ -125,30 +134,43 @@ console.log(getLastItem(numberArray));
 console.log(getLastItem(stringArray));
 console.log(getLastItem(objectArray));
 
-
-
-/// here we leared about interface in ts 
+/// here we leared about interface in ts
 interface IUser {
-  name : string
-  email : string 
-  googleId : string 
-  // here this method should return only string 
-  startTrial () : string
-  getCupon(cuponCode:string , amount:number) : number
+  name: string;
+  email: string;
+  googleId: string;
+  // here this method should return only string
+  startTrial(): string;
+  getCupon(cuponCode: string, amount: number): number;
 }
 
+// re-opening interface
+// by doing this we are adding new propery of type in our existing interface
+interface IUser {
+  // this is the new field that we are adding to the IUser interface
+  githubToken: string;
+}
 
-const user1 : IUser = {
-  name : "Sabbir",
-  email:"this@mail.com",
-  googleId :"a34s456lfk1h5d",
-  startTrial(){
-    return "Sabbir10"
+// or we can entend an interface like OOP inheritance that inherit properties from it's parent interface
+// we can extend interface from more than one interface by using (Admin extends IUser,Another) comma
+interface Admin extends IUser {
+  role: "Admin" | "User" | "Moderator";
+}
+// Creating actual user from that interface
+const user1: Admin = {
+  name: "Sabbir",
+  email: "this@mail.com",
+  googleId: "a34s456lfk1h5d",
+  startTrial() {
+    return "Sabbir10";
   },
-  // here this are parameter string 
-  getCupon(cuponCode :"sabbir10", amount : 10) {
-    return amount
-  }
-}
+  // here this are parameter string
+  getCupon(cuponCode: "sabbir10", amount: 10) {
+    return amount;
+  },
+  githubToken: "newgithubtoken",
+  // role is coming from Admin interface that inherit IUser interface
+  role: "Admin",
+};
 
-console.log(user1)
+console.log(user1);
