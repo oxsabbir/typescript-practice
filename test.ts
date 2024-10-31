@@ -42,7 +42,7 @@ const user: User[] = [
  * The partial takes in a type and return a new type with slight modification like it's set all the property to optional
  */
 
-const updateUser = function (id: number, updates: Partial<User>) {
+const updateUser = function (id: number, updates: Partial<User>):User|void  {
   const selectedUser = user.find((item) => item.id === id);
   console.log(selectedUser);
   if (!selectedUser) return console.log("No user found by provided ID");
@@ -51,12 +51,12 @@ const updateUser = function (id: number, updates: Partial<User>) {
 };
 
 const addNewUser = function (newUser: Omit<User, "id">): User {
-    const userAdded: User = {id : nextUserId++ , ...newUser}
-    user.push(userAdded)
-    return userAdded
+  const userAdded: User = { id: nextUserId++, ...newUser };
+  user.push(userAdded);
+  return userAdded;
 };
 
-addNewUser({username : "rocky", role :"contributor"})
+addNewUser({ username: "rocky", role: "contributor" });
 
 updateUser(1, { role: "member" });
 updateUser(2, { role: "admin", username: "oxsabbir" });
@@ -102,3 +102,53 @@ const displayPerson = function (person: Person) {
   console.log(`${person.name} lives at ${person?.address?.street}`);
 };
 // displayPerson(person1);
+
+/**
+ * Lesson about generics
+ */
+
+const numberArray = [23, 34, 53];
+
+const stringArray = ["name is ", "don't know", "how"];
+
+const objectArray = [{ name: "don't knwo" }, { name: "bob" }];
+
+const getLastItem = function <PlaceType>(
+  array: PlaceType[]
+): PlaceType | undefined {
+    
+  const retunableItem: PlaceType = array[array.length - 1];
+  return retunableItem;
+};
+
+console.log(getLastItem(numberArray));
+console.log(getLastItem(stringArray));
+console.log(getLastItem(objectArray));
+
+
+
+/// here we leared about interface in ts 
+interface IUser {
+  name : string
+  email : string 
+  googleId : string 
+  // here this method should return only string 
+  startTrial () : string
+  getCupon(cuponCode:string , amount:number) : number
+}
+
+
+const user1 : IUser = {
+  name : "Sabbir",
+  email:"this@mail.com",
+  googleId :"a34s456lfk1h5d",
+  startTrial(){
+    return "Sabbir10"
+  },
+  // here this are parameter string 
+  getCupon(cuponCode :"sabbir10", amount : 10) {
+    return amount
+  }
+}
+
+console.log(user1)
